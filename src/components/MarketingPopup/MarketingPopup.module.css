@@ -4,210 +4,242 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.8); /* Fundo mais escuro para foco */
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(8px);
-  z-index: 2000;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
 }
 
-.modal {
-  background: var(--bg-card); /* Adapta ao tema */
-  width: 100%;
-  max-width: 850px; /* Modal Largo */
-  height: 500px;
-  display: flex; /* Layout lado a lado */
+/* O TICKET GERAL */
+.ticketContainer {
+  display: flex;
+  width: 600px;
+  max-width: 100%;
+  height: 300px;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
   position: relative;
-  overflow: hidden;
-  border: 1px solid var(--bg-structure);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
 }
 
-/* Borda Neon no topo */
-.modal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--neon-yellow), var(--neon-magenta));
-  z-index: 10;
-}
-
-/* --- COLUNA DA IMAGEM (45%) --- */
-.imageCol {
-  flex: 0.8; /* Ocupa menos que a metade */
+/* LADO ESQUERDO (Aba do Ticket) */
+.ticketLeft {
+  width: 80px;
+  background: var(--brand-pink);
+  border-right: 4px dotted #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  overflow: hidden;
-  background: #000;
+  border: 4px solid #000;
+  border-right: none; /* A linha pontilhada faz a divisão */
 }
 
-.imageCol img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 10s ease; /* Zoom lento estilo Ken Burns */
-}
-
-.modal:hover .imageCol img {
-  transform: scale(1.1);
-}
-
-.imgOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.6));
-  z-index: 1;
-}
-
-.imageTag {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: var(--neon-yellow);
-  color: #000;
-  font-size: 0.7rem;
+.verticalText {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-family: var(--font-display);
   font-weight: 800;
-  padding: 5px 10px;
-  z-index: 2;
-  letter-spacing: 1px;
+  font-size: 1.5rem;
+  color: #fff;
+  letter-spacing: 5px;
 }
 
-/* --- COLUNA DO CONTEÚDO (55%) --- */
-.contentCol {
+/* LADO DIREITO (Conteúdo) */
+.ticketRight {
   flex: 1;
-  padding: 50px;
+  background: var(--neon-yellow); /* Fundo Amarelo Neon chamativo */
+  padding: 40px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  text-align: left;
+  text-align: center;
+  border: 4px solid #000;
+  border-left: none;
   position: relative;
+  /* Pattern sutil de fundo */
+  background-image: radial-gradient(#000 1px, transparent 1px);
+  background-size: 15px 15px;
 }
 
-.closeBtn {
+/* DIVISÓRIA (Corte) */
+.tearLine {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 1.2rem;
-  cursor: pointer;
-  z-index: 20;
+  left: 78px; /* Ajuste fino para ficar entre os dois */
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.scissor {
+  position: absolute;
+  top: -15px;
+  left: -12px;
+  font-size: 1.5rem;
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 50%;
   width: 30px;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  border: 1px solid transparent;
-  transition: all 0.3s;
+  transform: rotate(90deg);
+  z-index: 10;
 }
 
-.closeBtn:hover {
-  border-color: var(--text-main);
-  color: var(--text-main);
-}
-
+/* CONTEÚDO */
 .title {
-  font-size: 2.5rem;
-  line-height: 0.9;
-  color: var(--text-main);
-  margin-bottom: 20px;
-  text-transform: uppercase;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  color: #000;
+  margin-bottom: 10px;
+  transform: rotate(-2deg);
 }
 
 .highlight {
-  color: transparent;
-  -webkit-text-stroke: 1px var(--neon-magenta);
+  font-size: 4rem;
+  color: var(--brand-pink);
+  text-shadow: 3px 3px 0px #000;
   display: block;
-  font-size: 3rem;
 }
 
-.text {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  margin-bottom: 30px;
-  line-height: 1.5;
+.subtitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 25px;
+  max-width: 80%;
+  background: #fff;
+  padding: 5px;
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
 }
 
-/* Formulário */
-.form {
+/* CAIXA DE CÓDIGO (Clicável) */
+.codeBox {
+  background: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border: 3px dashed #fff;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: center;
+  margin-bottom: 20px;
+  transition: all 0.2s;
   width: 100%;
+  max-width: 250px;
+  position: relative;
 }
 
-.inputWrapper input {
-  width: 100%;
-  padding: 15px;
-  background: var(--bg-main);
-  border: 1px solid var(--bg-structure);
-  color: var(--text-main);
-  font-family: var(--font-body);
-  outline: none;
-  transition: border-color 0.3s;
+.codeBox:hover {
+  transform: scale(1.05);
+  background: var(--brand-pink);
+  border-color: #000;
 }
 
-.inputWrapper input:focus {
-  border-color: var(--neon-cyan);
+.codeLabel {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  opacity: 0.8;
 }
 
-.form button {
-  padding: 15px;
-  background: var(--neon-magenta);
+.codeText {
+  font-family: 'Courier New', monospace;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+}
+
+.copyIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+}
+
+/* BOTÕES */
+.closeBtn {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 40px;
+  height: 40px;
+  background: #000;
   color: #fff;
-  border: none;
+  border: 2px solid #fff;
+  border-radius: 50%;
   font-weight: 800;
-  font-family: var(--font-display);
-  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s;
-  letter-spacing: 1px;
+  z-index: 20;
+  transition: all 0.2s;
 }
 
-.form button:hover {
-  background: var(--neon-cyan);
-  box-shadow: 0 5px 15px rgba(0, 225, 255, 0.3);
-  transform: translateY(-2px);
+.closeBtn:hover {
+  background: var(--brand-pink);
+  transform: rotate(90deg);
 }
 
-.skipBtn {
-  background: none;
+.shopBtn {
+  background: transparent;
   border: none;
-  margin-top: 15px;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  cursor: pointer;
+  font-weight: 900;
   text-decoration: underline;
-  align-self: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #000;
+  font-family: var(--font-display);
 }
 
-.skipBtn:hover { color: var(--text-main); }
+.shopBtn:hover {
+  color: var(--brand-pink);
+}
 
-/* RESPONSIVIDADE */
-@media (max-width: 768px) {
-  .modal {
+/* EFEITO DE FUROS DO TICKET (Opcional, usando pseudo elementos) */
+.holeTop, .holeBottom {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  background: #000; /* Simula um buraco se o overlay for preto, ou usa radial gradient */
+  border-radius: 50%;
+  display: none; /* Ative se quiser buracos reais usando mask-image, mas é complexo */
+}
+
+/* RESPONSIVO */
+@media (max-width: 600px) {
+  .ticketContainer {
     flex-direction: column;
     height: auto;
-    max-height: 85vh; /* Não ocupa tela toda pra dar pra clicar fora */
+    width: 90%;
   }
 
-  .imageCol {
-    height: 150px; /* Imagem vira um banner no topo */
-    flex: none;
+  .ticketLeft {
+    width: 100%;
+    height: 50px;
+    border-right: 4px solid #000;
+    border-bottom: none;
+    flex-direction: row;
   }
 
-  .contentCol {
-    padding: 30px 20px;
-    text-align: center;
+  .verticalText {
+    writing-mode: horizontal-tb;
+    transform: none;
   }
 
-  .highlight {
-    font-size: 2.5rem;
+  .tearLine {
+    display: none; /* Esconde no mobile pra simplificar */
+  }
+
+  .ticketRight {
+    border-left: 4px solid #000;
+    border-top: 4px dashed #000; /* Linha de corte vira horizontal */
   }
 }
