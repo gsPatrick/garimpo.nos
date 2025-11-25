@@ -6,16 +6,20 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   // 1. COMEÇA DESLOGADO (null)
-  // Se quiser testar logado, mude para: { name: "Admin", email: "admin@street.com" }
   const [user, setUser] = useState(null);
 
-  const login = (email) => {
-    // Simula o login preenchendo o usuário
-    setUser({ name: "Street Member", email });
+  // CORREÇÃO: Agora a função aceita tanto um objeto {name, email} quanto apenas o email string
+  const login = (userData) => {
+    if (typeof userData === 'string') {
+      // Se veio só o email (string), preenche um nome padrão
+      setUser({ name: "Street Member", email: userData });
+    } else {
+      // Se veio o objeto completo { name, email }, usa ele
+      setUser(userData);
+    }
   };
 
   const logout = () => {
-    // Volta para nulo (Deslogado)
     setUser(null);
   };
 
@@ -24,7 +28,7 @@ export function AuthProvider({ children }) {
       user, 
       login, 
       logout, 
-      isAuthenticated: !!user // Converte o objeto usuário em true/false
+      isAuthenticated: !!user 
     }}>
       {children}
     </AuthContext.Provider>

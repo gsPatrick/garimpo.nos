@@ -1,0 +1,513 @@
+/* --- LAYOUT GERAL --- */
+.main {
+  padding-top: 120px; /* Espaço do Header fixo */
+  padding-bottom: 100px;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Fundo Texturizado (Grid/Caderno) */
+.bgGrid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(121, 121, 121, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(121, 121, 121, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5%;
+  position: relative;
+  z-index: 10;
+}
+
+/* --- COLUNA ESQUERDA: GALERIA (ESTILO POLAROID) --- */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mainImageWrapper {
+  width: 100%;
+  height: 650px;
+  background: #fff; /* Polaroid é sempre branca */
+  padding: 15px 15px 50px 15px; /* Espaço maior embaixo estilo Polaroid */
+  border: 3px solid #000;
+  box-shadow: 15px 15px 0px rgba(235, 104, 179, 0.2); /* Sombra Rosa Suave */
+  position: relative;
+  transform: rotate(-2deg);
+  overflow: hidden; /* Para a imagem não vazar */
+}
+
+/* Fita Adesiva no Topo */
+.tapeTop {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 35px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(2px);
+  border: 1px solid #ccc;
+  z-index: 20;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.mainImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid #eee;
+  display: block;
+}
+
+/* Sticker "LOOKINHO" */
+.stickerPhoto {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-script);
+  font-size: 1.5rem;
+  padding: 5px 15px;
+  transform: rotate(-5deg);
+  box-shadow: 3px 3px 0px var(--brand-pink);
+  z-index: 10;
+}
+
+/* Grid de Thumbnails */
+.thumbGrid {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #000;
+  cursor: pointer;
+  overflow: hidden;
+  background: #fff;
+  padding: 5px;
+  transition: all 0.2s;
+}
+
+/* Thumbs tortinhas para dar ar de bagunça organizada */
+.thumb:nth-child(odd) { transform: rotate(3deg); }
+.thumb:nth-child(even) { transform: rotate(-3deg); }
+
+.thumb:hover, .activeThumb {
+  transform: scale(1.1) rotate(0deg);
+  border-color: var(--brand-pink);
+  box-shadow: 3px 3px 0px #000;
+  z-index: 5;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- COLUNA DIREITA: INFO PANEL --- */
+.infoPanel {
+  position: relative;
+  padding-top: 20px;
+}
+
+/* Card que fica fixo ao rolar */
+.stickyWrapper {
+  position: sticky;
+  top: 140px;
+  background: var(--bg-card); /* Adapta ao tema (Branco ou Cinza Escuro) */
+  padding: 30px;
+  border: 3px solid var(--text-main); /* Borda segue a cor do texto (Preto/Branco) */
+  box-shadow: 10px 10px 0px var(--brand-grey);
+}
+
+.header {
+  margin-bottom: 20px;
+  border-bottom: 2px dashed var(--border-color);
+  padding-bottom: 20px;
+}
+
+.tagWrapper {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tagNew, .tagSeason {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border: 2px solid #000;
+  text-transform: uppercase;
+}
+
+.tagNew { background: var(--brand-pink); color: #fff; }
+.tagSeason { background: var(--neon-yellow); color: #000; }
+
+.title {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  line-height: 0.9;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  color: var(--text-main);
+  text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.priceTag {
+  font-family: var(--font-body);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #000;
+  background: var(--neon-yellow);
+  padding: 5px 15px;
+  border: 2px solid #000;
+  transform: rotate(-2deg);
+  box-shadow: 3px 3px 0px #000;
+}
+
+.ratingSummary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stars { color: var(--brand-pink); letter-spacing: 2px; font-size: 1.2rem; }
+.reviewCount { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; }
+
+.description {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 30px;
+  font-weight: 500;
+  display: flex;
+  gap: 10px;
+}
+
+.doodleArrow {
+  font-size: 1.5rem;
+  color: var(--brand-pink);
+  margin-top: 2px;
+}
+
+/* --- SELETORES (COR/TAMANHO) --- */
+.selectors {
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.selectorGroup label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text-main);
+  margin-bottom: 10px;
+  display: block;
+  font-weight: 800;
+}
+
+.scriptLabel {
+  font-family: var(--font-script);
+  font-size: 1.5rem;
+  color: var(--brand-pink);
+  margin-left: 5px;
+  font-weight: 400;
+}
+
+.colorOptions { display: flex; gap: 10px; }
+
+.colorBtn {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.activeColorBtn {
+  border: 2px solid var(--text-main);
+  /* Anel de foco duplo */
+  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--brand-pink);
+  transform: scale(1.1);
+}
+
+.sizeOptions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.sizeBtn {
+  min-width: 50px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid var(--border-color);
+  color: var(--text-muted);
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-display);
+  padding: 0 10px;
+}
+
+.sizeBtn:hover {
+  border-color: var(--text-main);
+  color: var(--text-main);
+}
+
+.activeSize {
+  background: var(--text-main);
+  color: var(--bg-card) !important; /* Inverte cor */
+  border-color: var(--text-main);
+  box-shadow: 3px 3px 0px var(--brand-pink);
+  transform: translate(-2px, -2px);
+}
+
+/* BOTÃO DE COMPRA */
+.addToCartBtn {
+  width: 100%;
+  padding: 18px;
+  background: var(--brand-pink);
+  border: 3px solid #000; /* Borda sempre preta para contraste cartoon */
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 6px 6px 0px #000;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+
+.addToCartBtn:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0px #000;
+  background: #000; /* Vira preto no hover */
+}
+
+.shippingNote {
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-weight: 700;
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
+}
+
+.truckIcon { font-size: 1.1rem; margin-right: 5px; }
+
+/* --- SEÇÃO DE AVALIAÇÕES (REVIEWS) --- */
+.reviewsSection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 5%;
+  position: relative;
+  z-index: 10;
+}
+
+.reviewsHeader {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.reviewsHeader h2 {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--text-main);
+}
+
+.scriptHighlight {
+  font-family: var(--font-script);
+  color: var(--brand-pink);
+  font-size: 3.5rem;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+}
+
+.writeReviewBtn {
+  background: var(--bg-card);
+  border: 2px solid var(--text-main);
+  color: var(--text-main);
+  padding: 10px 20px;
+  font-weight: 800;
+  margin-top: 15px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px var(--text-main);
+  transition: all 0.2s;
+  font-family: var(--font-display);
+}
+
+.writeReviewBtn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--text-main);
+}
+
+/* FORMULÁRIO DE REVIEW */
+.reviewForm {
+  max-width: 600px;
+  margin: 0 auto 50px;
+  background: var(--bg-card);
+  padding: 30px;
+  border: 2px dashed var(--text-main);
+  text-align: center;
+  overflow: hidden; /* Para animação de altura */
+}
+
+.reviewForm h3 {
+  margin-top: 0;
+  color: var(--text-main);
+}
+
+.starInput { 
+  font-size: 2rem; 
+  margin: 15px 0; 
+  cursor: pointer; 
+}
+
+.starFilled { color: var(--neon-yellow); text-shadow: 1px 1px 0px #000; }
+.starEmpty { color: var(--border-color); }
+
+.input, .textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid var(--border-color);
+  margin-bottom: 15px;
+  font-family: var(--font-body);
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+.submitBtn {
+  background: var(--text-main);
+  color: var(--bg-main);
+  padding: 10px 30px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+}
+
+/* GRID DE REVIEWS (POST-ITS) */
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+.reviewCard {
+  background: #fff; /* Post-it clássico */
+  color: #000; /* Texto sempre preto no post-it */
+  padding: 25px;
+  border: 1px solid #ccc;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+/* Alternância de cores e rotação */
+.reviewCard:nth-child(odd) { transform: rotate(-1deg); background: #fffae0; /* Amarelo claro */ }
+.reviewCard:nth-child(even) { transform: rotate(1deg); background: #fff0f5; /* Rosa claro */ }
+
+.pin {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  background: #c00; /* Alfinete vermelho */
+  border-radius: 50%;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.reviewTop {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  align-items: flex-start;
+}
+
+.userInfo { display: flex; gap: 10px; align-items: center; }
+.userAvatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #000; }
+.userName { font-weight: 800; font-size: 1rem; display: block; color: #000; }
+.verified { font-size: 0.6rem; background: #000; color: #fff; padding: 2px 5px; }
+
+.reviewText {
+  font-family: 'Courier New', monospace; /* Fonte Typewriter */
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* --- SEÇÃO RELACIONADOS --- */
+.relatedSection {
+  padding: 80px 5%;
+  text-align: center;
+  border-top: 3px solid var(--text-main);
+  background: var(--bg-card);
+}
+
+.relatedTitle {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  margin-bottom: 50px;
+  color: var(--text-main);
+  text-transform: uppercase;
+}
+
+.scriptPink {
+  font-family: var(--font-script);
+  color: var(--brand-pink);
+  font-size: 4rem;
+  text-transform: none;
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 1024px) {
+  .container { grid-template-columns: 1fr; }
+  .mainImageWrapper { height: 500px; transform: rotate(0); margin-bottom: 30px; }
+  .stickyWrapper { position: static; box-shadow: 5px 5px 0px var(--brand-grey); }
+  .reviewsGrid { grid-template-columns: 1fr; }
+  .relatedGrid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 600px) {
+  .title { font-size: 2.5rem; }
+  .thumb { width: 60px; height: 60px; }
+  .relatedGrid { grid-template-columns: 1fr; }
+  .addToCartBtn { font-size: 1.1rem; }
+}

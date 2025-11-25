@@ -3,30 +3,29 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { PRODUCTS_DB } from '@/data/products'; // Consumindo o Mock Real
 import styles from './SearchOverlay.module.css';
-
-// Mock Data para busca
-const SEARCH_ITEMS = [
-  { id: 1, name: "Cyber Hoodie X1", category: "Hoodies", price: "349,90", img: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=200" },
-  { id: 2, name: "Neon Beanie", category: "Accessories", price: "89,90", img: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?q=80&w=200" },
-  { id: 3, name: "Cargo Pants V2", category: "Pants", price: "289,90", img: "https://images.unsplash.com/photo-1552160753-117159821e01?q=80&w=200" },
-  { id: 4, name: "Acid Wash Tee", category: "T-Shirts", price: "129,90", img: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=200" },
-];
 
 export default function SearchOverlay({ isOpen, onClose }) {
   const [query, setQuery] = useState('');
   const inputRef = useRef(null);
 
-  // Auto-focus quando abre
+  // Foca no input sempre que abre
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
 
-  // Filtro simples
-  const filteredItems = SEARCH_ITEMS.filter(item => 
-    item.name.toLowerCase().includes(query.toLowerCase())
+  // Limpa a busca ao fechar
+  useEffect(() => {
+    if (!isOpen) setQuery('');
+  }, [isOpen]);
+
+  // Filtro no Mock DB
+  const filteredItems = PRODUCTS_DB.filter(item => 
+    item.name.toLowerCase().includes(query.toLowerCase()) || 
+    item.category.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
@@ -37,50 +36,96 @@ export default function SearchOverlay({ isOpen, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          <div className={styles.container}>
-            {/* Botão Fechar */}
-            <button onClick={onClose} className={styles.closeBtn}>✕ ESC</button>
+          {/* Fundo com ruído/grid */}
+          <div className={styles.bgTexture}></div>
 
-            {/* Input Gigante */}
-            <div className={styles.inputWrapper}>
-              <input 
-                ref={inputRef}
-                type="text" 
-                placeholder="TYPE TO SEARCH..." 
-                className={styles.input}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <div className={styles.line}></div>
+          <div className={styles.container}>
+            
+            {/* Botão Fechar (Estilo Sticker) */}
+            <button onClick={onClose} className={styles.closeBtn}>
+              FECHAR ✕
+            </button>
+
+            {/* Cabeçalho da Busca */}
+            <div className={styles.searchHeader}>
+              <span className={styles.searchLabel}>O QUE VOCÊ PROCURA?</span>
+              <div className={styles.inputWrapper}>
+                <input 
+                  ref={inputRef}
+                  type="text" 
+                  placeholder="DIGITE AQUI..." 
+                  className={styles.input}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                <motion.div 
+                  className={styles.underline} 
+                  layoutId="underline"
+                />
+              </div>
             </div>
 
-            {/* Resultados */}
-            <div className={styles.results}>
+            {/* Área de Resultados */}
+            <div className={styles.resultsArea}>
+              
+              {/* CASO: SEM RESULTADOS */}
               {query && filteredItems.length === 0 && (
-                <p className={styles.noResults}>NO MATCHES FOUND FOR "{query}"</p>
+                <motion.div 
+                  className={styles.emptyState}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <div className={styles.sadFace}>:(</div>
+                  <p>OPS! NÃO ENCONTRAMOS NADINHA COM "{query}"</p>
+                  <span>Tente buscar por "Cropped", "Tee" ou "Neon"</span>
+                </motion.div>
               )}
 
-              {query && filteredItems.map((item) => (
-                <Link href={`/product/${item.id}`} key={item.id} className={styles.resultItem} onClick={onClose}>
-                  <img src={item.img} alt={item.name} className={styles.thumb} />
-                  <div className={styles.info}>
-                    <span className={styles.cat}>{item.category}</span>
-                    <h3 className={styles.name}>{item.name}</h3>
-                    <span className={styles.price}>R$ {item.price}</span>
-                  </div>
-                  <span className={styles.arrow}>→</span>
-                </Link>
-              ))}
+              {/* CASO: LISTA DE RESULTADOS */}
+              {query && filteredItems.length > 0 && (
+                <div className={styles.resultsList}>
+                  {filteredItems.map((item, index) => (
+                    <Link href={`/shop/${item.id}`} key={item.id} onClick={onClose} className={styles.linkWrapper}>
+                      <motion.div 
+                        className={styles.resultItem}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        whileHover={{ x: 10, backgroundColor: 'var(--bg-hover)' }}
+                      >
+                        <div className={styles.thumbWrapper}>
+                          <img src={item.imgFront} alt={item.name} />
+                        </div>
+                        
+                        <div className={styles.itemInfo}>
+                          <span className={styles.catTag}>{item.category}</span>
+                          <h3 className={styles.itemName}>{item.name}</h3>
+                          <span className={styles.itemPrice}>{item.price}</span>
+                        </div>
 
-              {!query && (
-                <div className={styles.quickLinks}>
-                  <span>TRENDING:</span>
-                  <button onClick={() => setQuery("Hoodie")}>HOODIES</button>
-                  <button onClick={() => setQuery("Pants")}>CARGO</button>
-                  <button onClick={() => setQuery("Neon")}>NEON</button>
+                        <div className={styles.arrowAction}>➔</div>
+                      </motion.div>
+                    </Link>
+                  ))}
                 </div>
               )}
+
+              {/* CASO: BUSCA VAZIA (SUGESTÕES) */}
+              {!query && (
+                <div className={styles.suggestions}>
+                  <p className={styles.suggestionsTitle}>VIBES DO MOMENTO:</p>
+                  <div className={styles.tagsCloud}>
+                    {['CROPPED', 'OVERSIZED', 'CARGO', 'NEON', 'ACESSÓRIOS'].map(tag => (
+                      <button key={tag} onClick={() => setQuery(tag)} className={styles.tagBtn}>
+                        #{tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
             </div>
           </div>
         </motion.div>
