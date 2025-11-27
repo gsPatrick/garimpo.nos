@@ -1,115 +1,121 @@
-
 :root {
-  /* --- NOVA PALETA "GARIMPO" --- */
-  --brand-pink: #eb68b3;   /* Rosa Chiclete / Destaque */
-  --brand-white: #fcfefd;  /* Branco Off-White (Fundo Light) */
-  --brand-grey: #797979;   /* Cinza Detalhes */
+  /* --- CORES PRINCIPAIS (PALETA Y2K/TEEN) --- */
+  --brand-pink: #eb68b3;   /* Rosa Chiclete - A cor principal */
+  --brand-pink-dark: #c2468e; 
+  --brand-grey: #797979;   
+  --neon-yellow: #FFD000;  /* Marca texto */
+  --neon-green: #06FF6B;
   
-  --neon-yellow: #FFD000;  /* Mantido para detalhes de atenção */
-  --neon-green: #06FF6B;   /* Mantido para "Frete Grátis" etc */
-  
-  /* Mapeamento para o Sistema Antigo (Para não quebrar componentes) */
-  --neon-magenta: var(--brand-pink); 
-  --neon-cyan: #00E1FF; /* Ainda usado em alguns detalhes dark */
-
-  /* --- VARIÁVEIS PADRÃO (LIGHT MODE - Default agora) --- */
-  --bg-main: var(--brand-white);
-  --bg-card: #F4F4F4;
-  --bg-structure: #E0E0E0;
-  --bg-glass: rgba(252, 254, 253, 0.9); /* Vidro claro */
-  
-  --text-main: #000000;      /* Preto puro para contraste no branco */
-  --text-muted: var(--brand-grey);
-  --border-color: #ddd;
-  
-  /* Cor das partículas do Canvas (Rosa no claro fica lindo) */
-  --particle-color: var(--brand-pink); 
-
   /* Fontes */
-  --font-display: var(--font-oswald), sans-serif;
-  --font-body: var(--font-urbanist), sans-serif;
-  --font-script: var(--font-script), cursive; /* Nova fonte */
+  --font-display: var(--font-oswald), sans-serif;   /* Fonte Impacto/Bloco */
+  --font-body: var(--font-urbanist), sans-serif;    /* Leitura */
+  --font-script: var(--font-script), cursive;       /* Manuscrita/Caneta */
 }
 
-/* --- TEMA ESCURO (DARK MODE - Vibe Night/Street) --- */
+/* --- TEMA CLARO (LIGHT MODE - PADRÃO) --- */
+:root {
+  --bg-main: #ffffff;
+  --bg-card: #f4f4f4;
+  --bg-texture: radial-gradient(#ccc 1px, transparent 1px);
+  
+  --text-main: #000000;
+  --text-inverse: #ffffff;
+  --text-muted: #555555;
+  
+  --shadow-hard: 5px 5px 0px #000000; /* Sombra dura cartoon */
+  --border-color: #000000;
+}
+
+/* --- TEMA ESCURO (DARK MODE) --- */
 [data-theme='dark'] {
-  --bg-main: #0D0D0D;        /* Preto Profundo */
-  --bg-card: #1A1A1A;
-  --bg-structure: #262626;
-  --bg-glass: rgba(13, 13, 13, 0.85);
-
-  --text-main: #FFFFFF;
-  --text-muted: #b0b0b0;     /* Cinza mais claro para ler no preto */
-  --border-color: #333;
-
-  /* No escuro, o rosa também brilha */
-  --particle-color: var(--brand-pink); 
+  --bg-main: #0a0a0a;
+  --bg-card: #151515;
+  --bg-texture: radial-gradient(#333 1px, transparent 1px);
+  
+  --text-main: #ffffff;
+  --text-inverse: #000000;
+  --text-muted: #aaaaaa;
+  
+  --shadow-hard: 5px 5px 0px var(--brand-pink); /* Sombra rosa no escuro */
+  --border-color: #ffffff;
 }
 
-/* Reset e Base */
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
-html,
-body {
+html, body {
   max-width: 100vw;
   overflow-x: hidden;
   background-color: var(--bg-main);
+  background-image: var(--bg-texture);
+  background-size: 20px 20px;
   color: var(--text-main);
   font-family: var(--font-body);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+a { color: inherit; text-decoration: none; }
+
+/* --- UTILITÁRIOS: TIPOGRAFIA TEEN / COLAGEM --- */
+
+/* Container da Pilha de Palavras */
+.teen-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 0.75; /* Texto bem encavalado */
+  position: relative;
+  z-index: 20;
+  transform: rotate(-2deg); /* Levemente torto */
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* --- CLASSES UTILITÁRIAS (ESTILO TEEN/CAPRICHO) --- */
-
-/* 1. Texto Script (Assinatura/Brush) */
-.script-font {
-  font-family: var(--font-script);
-  font-weight: 400;
-  text-transform: none; /* Script não pode ser uppercase forçado */
-  color: var(--brand-pink);
-}
-
-/* 2. Efeito Sticker (Letra Branca com Borda Preta e Sombra Dura) */
-/* Igual aos stories "SUAS PEÇAS" */
-.sticker-text {
+/* 1. TOPO: Bloco Sólido (Ex: "OS JEANS") */
+.teen-top {
   font-family: var(--font-display);
   font-weight: 800;
+  font-size: clamp(3.5rem, 8vw, 6rem); /* GIGANTE */
+  color: var(--brand-pink);
   text-transform: uppercase;
-  color: #fff;
-  /* Borda preta em volta da letra */
-  -webkit-text-stroke: 2px #000; 
-  /* Sombra dura (sem blur) para parecer adesivo */
-  text-shadow: 4px 4px 0px var(--brand-pink); 
-  line-height: 0.9;
-  letter-spacing: -1px;
-  transform: rotate(-2deg); /* Leve inclinação */
-  display: inline-block;
+  text-shadow: 3px 3px 0px var(--border-color); /* Contorno cartoon */
+  z-index: 3;
 }
 
-/* 3. Efeito Colagem (Imagens com borda branca e sombra) */
-.collage-img {
-  border: 5px solid #fff;
-  box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
-  transform: rotate(2deg);
-  transition: transform 0.3s ease;
+/* 2. MEIO: Manuscrito Rabiscado (Ex: "mais") */
+.teen-middle {
+  font-family: var(--font-script);
+  font-size: clamp(4rem, 10vw, 8rem);
+  color: var(--bg-main); /* Cor do fundo pra parecer "recorte" ou branco */
+  text-shadow: 
+    -1px -1px 0 var(--border-color),  
+    1px -1px 0 var(--border-color),
+    -1px 1px 0 var(--border-color),
+    1px 1px 0 var(--border-color),
+    4px 4px 0px var(--brand-grey); /* Sombra 3D */
+  z-index: 4; /* Fica por cima de tudo */
+  transform: rotate(-10deg) translateY(-10px);
+  white-space: nowrap;
 }
 
-.collage-img:hover {
-  transform: rotate(0deg) scale(1.02);
-  z-index: 10;
+/* Variação para Dark Mode (Meio ficar legível) */
+[data-theme='dark'] .teen-middle {
+  color: #fff; /* Sempre branco no dark pra destacar */
+}
+
+/* 3. BASE: Gigante e Pesado (Ex: "COOL") */
+.teen-bottom {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(5rem, 15vw, 11rem); /* COLOSSAL */
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: -5px;
+  z-index: 2;
+  /* Efeito de Sombra 3D Retro */
+  text-shadow: 
+    3px 3px 0px var(--brand-grey),
+    6px 6px 0px var(--brand-pink);
 }

@@ -1,0 +1,183 @@
+.section {
+  padding: 100px 0; /* Aumentei o padding vertical geral */
+  background-color: var(--bg-main); 
+  background-image: radial-gradient(var(--brand-grey) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 100px; /* Mais espaço embaixo do título gigante */
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px; /* Mais respiro entre as colunas */
+  align-items: center;
+}
+
+/* --- CARDS DE FOTO --- */
+.cardLarge, .cardSmall {
+  position: relative;
+  overflow: hidden;
+  border: 4px solid #fff;
+  box-shadow: 10px 10px 0px var(--brand-pink);
+  transition: transform 0.3s ease;
+}
+
+.cardLarge:hover, .cardSmall:hover {
+  transform: scale(1.02);
+  z-index: 5;
+}
+
+.cardLarge {
+  height: 600px;
+  background: var(--bg-structure);
+}
+
+.cardSmall {
+  height: 350px;
+  background: var(--bg-structure);
+  margin-top: 30px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.1) brightness(0.9);
+}
+
+/* --- OVERLAYS DE TEXTO --- */
+.overlayTextMain {
+  position: absolute;
+  bottom: 50px; 
+  left: 30px; 
+  z-index: 10;
+  width: 100%;
+  pointer-events: none;
+}
+
+.overlayCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+  width: 100%;
+}
+
+/* DECORAÇÃO */
+.tape {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 120px;
+  height: 35px;
+  background: rgba(255,255,255,0.8);
+  z-index: 20;
+}
+
+.sticker {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--neon-yellow);
+  color: #000;
+  font-family: var(--font-display);
+  font-weight: 900;
+  padding: 5px 10px;
+  transform: rotate(5deg);
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0px #000;
+}
+
+/* COLUNA DIREITA */
+.rightCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.textBox {
+  background: var(--bg-card);
+  padding: 30px;
+  border: 2px solid var(--border-color);
+  box-shadow: -8px 8px 0px var(--brand-grey);
+  margin-bottom: 20px;
+  position: relative;
+  color: var(--text-main);
+}
+
+.textBox::after {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent var(--border-color) transparent transparent; 
+  display: block; 
+}
+
+.nameTitle {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #fff;
+  background: var(--brand-pink);
+  display: inline-block;
+  padding: 2px 10px;
+  transform: skewX(-10deg);
+  border: 1px solid #000;
+}
+
+.textBox p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--text-main);
+  margin-bottom: 20px;
+}
+
+.linkBtn {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--text-main);
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+.linkBtn:hover { color: var(--brand-pink); }
+
+.marqueeStrip {
+  margin-top: 80px; /* Mais espaço para o final */
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  letter-spacing: 5px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .contentGrid { grid-template-columns: 1fr; gap: 40px; }
+  .cardLarge { height: 500px; }
+  .textBox::after { display: none; }
+  .overlayTextMain { bottom: 20px; left: 15px; }
+  
+  /* Ajuste responsivo para o cabeçalho gigante não quebrar */
+  .header { margin-bottom: 60px; }
+}

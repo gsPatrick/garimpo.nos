@@ -1,303 +1,54 @@
-/* Container Principal */
+/* Container Principal (SEMPRE DARK) */
 .header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px;
-  background: var(--bg-glass);
+  height: 90px;
+  /* Fundo Escuro com transparência (Vidro Fumê) */
+  background: rgba(10, 10, 10, 0.95); 
   backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 5%;
   z-index: 1000;
-  border-bottom: 1px solid var(--bg-structure);
-  transition: background 0.3s ease, border-color 0.3s ease;
-}
-
-/* --- LOGO CURSIVO --- */
-.logo {
-  /* Fonte cursiva elegante (Fallback seguro) */
-  font-family: 'Brush Script MT', 'Segoe Script', cursive; 
-  font-size: 2.2rem; /* Um pouco maior pq cursiva tende a ser pequena */
-  font-weight: 400; /* Cursiva não precisa de bold pesado */
-  color: var(--text-main);
-  letter-spacing: 0; /* Cursiva precisa das letras juntas */
-  flex-shrink: 0;
-  /* Leve inclinação para dar charme */
-  transform: rotate(-2deg);
-  transition: transform 0.3s;
-}
-
-.logo:hover {
-  transform: rotate(0deg) scale(1.05);
-}
-
-.logo a { text-decoration: none; color: inherit; }
-
-.logo span { 
-  color: var(--neon-magenta);
-  font-weight: bold;
-  /* Garante que o .Nós fique legível */
-  text-shadow: 0 0 10px rgba(255, 0, 84, 0.3);
-}
-
-/* NAVEGAÇÃO */
-.nav {
-  display: flex;
-  gap: 30px;
-}
-
-.link {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--text-main);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  letter-spacing: 1px;
-  position: relative;
-}
-
-.link:hover {
-  color: var(--neon-cyan);
-  text-shadow: 0 0 8px rgba(0, 225, 255, 0.5);
-}
-
-/* ACTIONS CONTAINER */
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 15px; 
-}
-
-/* ESTILO PADRÃO PARA BOTÕES REDONDOS (Busca, Conta, Tema) */
-.iconBtn {
-  background: transparent;
-  border: 1px solid var(--bg-structure);
-  color: var(--text-main);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none; 
-}
-
-.iconBtn:hover {
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
-  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-/* BOTÃO DE CARRINHO */
-.cartBtn {
-  background: transparent;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-main);
-  cursor: pointer;
-  padding: 5px 10px;
-  transition: all 0.3s ease;
-  margin-left: 10px; 
-  border-left: 1px solid var(--bg-structure);
-  padding-left: 20px;
-}
-
-.cartIcon {
-  transition: transform 0.3s ease;
-}
-
-.cartCount {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-main);
-  position: relative;
-  top: 1px;
-}
-
-.cartBtn:hover .cartIcon {
-  color: var(--neon-magenta);
-  transform: scale(1.1) rotate(-5deg);
-  filter: drop-shadow(0 0 5px var(--neon-magenta));
-}
-
-.cartBtn:hover .cartCount {
-  color: var(--neon-magenta);
-}
-
-/* HAMBURGUER */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 6px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-}
-
-.bar {
-  width: 25px;
-  height: 2px;
-  background-color: var(--text-main);
-  transition: 0.3s;
-}
-
-/* MENU MOBILE FULLSCREEN */
-.mobileMenu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: var(--bg-main);
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-}
-
-.mobileHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 60px;
-  border-bottom: 1px solid var(--bg-structure);
-  padding-bottom: 20px;
-}
-
-/* Logo no Menu Mobile */
-.mobileLogo {
-  font-family: 'Brush Script MT', cursive; /* Mesma fonte cursiva */
-  font-size: 2rem;
-  color: var(--text-main);
-}
-.mobileLogo span { color: var(--neon-magenta); }
-
-.closeMenuBtn {
-  background: none;
-  border: 1px solid var(--text-muted);
-  color: var(--text-main);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.mobileNav {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.mobileLink {
-  font-family: var(--font-display);
-  font-size: 3rem; 
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--text-main);
-  line-height: 1;
-  -webkit-text-stroke: 1px transparent;
-  transition: all 0.3s;
-}
-
-.mobileLink:hover {
-  color: transparent;
-  -webkit-text-stroke: 1px var(--neon-magenta);
-  padding-left: 15px;
-}
-
-.mobileFooter {
-  margin-top: auto;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-}
-
-/* RESPONSIVO */
-@media (max-width: 1024px) {
-  .nav { display: none; }
-  .hamburger { display: flex; }
-  
-  .header { justify-content: space-between; }
-  .logo { position: absolute; left: 50%; transform: translateX(-50%); }
-}
-
-@media (max-width: 600px) {
-  .header { padding: 0 20px; height: 70px; }
-  
-  /* Ajuste do tamanho do logo no mobile */
-  .logo { font-size: 1.8rem; }
-  
-  .actions { gap: 10px; }
-  
-  .iconBtn { width: 35px; height: 35px; }
-  
-  .cartBtn { border-left: none; padding-left: 5px; margin-left: 5px; }
-}
-
-/* Container Principal */
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 5%;
-  z-index: 1000;
-  border-bottom: 3px solid #000;
-  transition: all 0.3s ease;
+  /* Borda Cinza Escura */
+  border-bottom: 1px solid #333; 
+  transition: background 0.3s ease;
 }
 
 /* --- LOGO --- */
 .logo {
-  font-family: var(--font-display);
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #000;
-  text-transform: uppercase;
-  letter-spacing: -1px;
   flex-shrink: 0;
-  text-decoration: none;
   display: flex;
   align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 5px 0;
   z-index: 20;
 }
 
 .logo a {
-  text-decoration: none;
-  color: inherit;
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  height: 100%;
 }
 
-.logo span { 
-  font-family: var(--font-script);
-  color: var(--brand-pink);
-  font-weight: 400;
-  text-transform: none;
-  font-size: 1.2em;
-  margin-left: 2px;
-  text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+.logoImg {
+  height: 70px; /* Grande */
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  /* Opcional: Se sua logo for preta, descomente a linha abaixo para inverter para branco no fundo escuro */
+  /* filter: invert(1); */
 }
 
-/* NAVEGAÇÃO (Desktop) */
+.logoImg:hover {
+  transform: scale(1.05);
+}
+
+/* NAVEGAÇÃO */
 .nav {
   display: flex;
   gap: 30px;
@@ -311,16 +62,15 @@
   font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #000;
+  color: #FFFFFF; /* Texto sempre Branco */
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: color 0.3s ease;
   letter-spacing: 1px;
-  position: relative;
 }
 
 .link:hover {
-  color: var(--brand-pink);
-  text-shadow: 1px 1px 0px #000;
+  color: var(--brand-pink); /* Rosa da Marca no Hover */
+  text-shadow: 0 0 10px var(--brand-pink);
 }
 
 /* ACTIONS CONTAINER */
@@ -331,11 +81,11 @@
   z-index: 20;
 }
 
-/* ÍCONES DESKTOP */
+/* ÍCONES DESKTOP (Estilo Botão Dark) */
 .iconBtn {
-  background: #fff;
-  border: 2px solid #000;
-  color: #000;
+  background: #000; /* Fundo Preto */
+  border: 1px solid #444; /* Borda Cinza Escura */
+  color: #FFFFFF; /* Ícone Branco */
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -345,14 +95,14 @@
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none; 
-  box-shadow: 2px 2px 0px #000;
 }
 
 .iconBtn:hover {
   background: var(--brand-pink);
   color: #fff;
-  transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px #000;
+  border-color: var(--brand-pink);
+  box-shadow: 0 0 10px var(--brand-pink);
+  transform: translateY(-2px);
 }
 
 /* CARRINHO */
@@ -361,35 +111,39 @@
   border: none;
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #000;
+  gap: 6px;
+  color: #FFFFFF; /* Texto Branco */
   cursor: pointer;
-  padding: 5px 0 5px 15px;
+  padding: 5px 10px;
   transition: all 0.3s ease;
-  border-left: 2px solid #000;
+  margin-left: 10px; 
+  border-left: 1px solid #444; /* Divisória Escura */
+  padding-left: 20px;
 }
 
 .cartIcon {
   transition: transform 0.3s ease;
-  width: 24px;
-  height: 24px;
 }
 
 .cartCount {
   font-family: var(--font-display);
   font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--brand-pink);
+  font-weight: 700;
+  color: #FFFFFF;
   position: relative;
   top: 1px;
 }
 
 .cartBtn:hover .cartIcon {
+  color: var(--brand-pink);
   transform: scale(1.1) rotate(-5deg);
+}
+
+.cartBtn:hover .cartCount {
   color: var(--brand-pink);
 }
 
-/* HAMBURGUER (Só aparece no mobile) */
+/* HAMBURGUER (Mobile) */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -404,25 +158,24 @@
 .bar {
   width: 28px;
   height: 3px;
-  background-color: #000;
+  background-color: #FFFFFF; /* Barras Brancas */
   transition: 0.3s;
   border-radius: 2px;
 }
 
-/* MENU MOBILE */
+/* MENU MOBILE FULLSCREEN (Sempre Dark) */
 .mobileMenu {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  background: var(--bg-main);
-  background-image: radial-gradient(#ccc 1px, transparent 1px);
-  background-size: 20px 20px;
+  background: #0a0a0a; /* Fundo Preto Profundo */
   z-index: 2000;
   display: flex;
   flex-direction: column;
   padding: 30px;
+  border-right: 1px solid #333;
 }
 
 .mobileHeader {
@@ -430,25 +183,19 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
-  border-bottom: 3px solid #000;
+  border-bottom: 1px solid #333;
   padding-bottom: 20px;
 }
 
-.mobileLogo {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  color: #000;
-  font-weight: 800;
-}
-.mobileLogo span { 
-  color: var(--brand-pink); 
-  font-family: var(--font-script);
-  font-weight: 400;
+.mobileLogoImg {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
 }
 
 .closeMenuBtn {
   background: #000;
-  border: none;
+  border: 1px solid #444;
   color: #fff;
   width: 40px;
   height: 40px;
@@ -458,7 +205,6 @@
   font-weight: 800;
 }
 
-/* LINHA DE AÇÕES DENTRO DO MOBILE */
 .mobileActionsRow {
   display: flex;
   gap: 15px;
@@ -467,21 +213,20 @@
 }
 
 .mobileIconBtn {
-  background: #fff;
-  border: 2px solid #000;
+  background: #000;
+  border: 1px solid #444;
   padding: 10px 15px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.8rem;
-  color: #000;
+  color: #fff;
   text-decoration: none;
-  box-shadow: 3px 3px 0px var(--brand-pink);
   text-transform: uppercase;
 }
 
 .mobileIconBtn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px var(--brand-pink);
+  background: var(--brand-pink);
+  border-color: var(--brand-pink);
 }
 
 .mobileNav {
@@ -495,7 +240,7 @@
   font-size: 3rem; 
   text-transform: uppercase;
   text-decoration: none;
-  color: #000;
+  color: #FFFFFF;
   line-height: 1;
   -webkit-text-stroke: 1px transparent;
   transition: all 0.3s;
@@ -503,13 +248,13 @@
 
 .mobileLink:hover {
   color: transparent;
-  -webkit-text-stroke: 2px var(--brand-pink);
+  -webkit-text-stroke: 1px var(--brand-pink);
   padding-left: 15px;
 }
 
 .mobileFooter {
   margin-top: auto;
-  color: var(--brand-grey);
+  color: #888;
   font-size: 0.8rem;
   letter-spacing: 2px;
   font-weight: 700;
@@ -522,7 +267,7 @@
   
   .header { 
     justify-content: space-between; 
-    height: 70px;
+    height: 80px;
     padding: 0 20px;
   }
 
@@ -531,21 +276,17 @@
     position: absolute; 
     left: 50%; 
     transform: translateX(-50%); 
-    font-size: 1.8rem;
   }
   
-  /* ESCONDE ÍCONES EXTRAS DA BARRA */
-  .iconBtn { 
-    display: none; 
+  .logoImg {
+    height: 50px;
   }
   
-  /* MANTÉM CARRINHO VISÍVEL */
+  .iconBtn { display: none; }
+  
   .cartBtn { 
     border-left: none; 
     padding-left: 0; 
     margin-left: 0; 
   }
-  
-  /* Ajuste para ícone do carrinho não quebrar */
-  .cartCount { font-size: 0.9rem; }
 }
