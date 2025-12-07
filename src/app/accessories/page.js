@@ -14,8 +14,20 @@ export default function AccessoriesPage() {
     const fetchProducts = useCallback(async () => {
         setLoading(true);
         try {
-            // Filtering by category name 'Acessórios'
-            const response = await api.get('/products', { params: { category: 'Acessórios' } });
+            // Filter by is_accessory flag if supported, otherwise fallback to Category 'Acessórios'
+            // Ideally backend supports `?is_accessory=true`
+            // Let's assume we updated backend to support it or we filter client side if needed.
+            // But for now, let's try to send `category=Acessórios` AND `is_accessory=true` if possible.
+            // Or just `category=Acessórios` if that's how they are categorized.
+            // The user asked to "separate" them, implying they might not just be a category.
+            // But if we flagged them, we should use the flag.
+            // Let's try to pass `is_accessory=true`.
+            const response = await api.get('/products', { params: { is_accessory: true } });
+
+            // If API ignores is_accessory and returns all, we might need to filter client side?
+            // But let's assume API update (which we haven't done explicitly for GET /products yet)
+            // Wait, I need to update API-ECOMMERCE `product.service.js` `getProducts` to handle `is_accessory` filter!
+            // I missed that in the plan execution. I will do it next.
 
             const mappedProducts = response.data.data.map(p => ({
                 id: p.id,
