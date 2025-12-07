@@ -23,12 +23,17 @@ export default function LookbookPage() {
           const title = nameParts[0] || "LOOK";
           const subtitle = nameParts.slice(1).join(' ') || "Style";
 
+          const rawImg = prod.images?.[0]?.src;
+          const mainImg = rawImg
+            ? (rawImg.startsWith('http') ? rawImg : `https://geral-tiptagapi.r954jc.easypanel.host${rawImg}`)
+            : 'https://via.placeholder.com/800x800?text=LOOK';
+
           return {
             id: prod.id,
             title: title.toUpperCase(),
             subtitle: subtitle,
             desc: prod.description || "Acessório essencial para compor seu visual.",
-            mainImg: prod.images?.[0] || 'https://via.placeholder.com/800x800?text=LOOK',
+            mainImg: mainImg,
             products: [
               { name: prod.name, price: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(prod.price) }
             ],

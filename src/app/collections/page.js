@@ -26,12 +26,17 @@ export default function CollectionsPage() {
         const stickers = ["NEW", "HOT", "SALE", "TREND"];
         const colors = ["pink", "black", "green"];
 
+        const rawImage = filterType === 'CATEGORIAS' ? item.image : item.logo;
+        const imageUrl = rawImage
+          ? (rawImage.startsWith('http') ? rawImage : `https://geral-tiptagapi.r954jc.easypanel.host${rawImage}`)
+          : 'https://via.placeholder.com/600x800?text=IMAGE';
+
         return {
           id: item.id,
           title: item.name.toUpperCase(),
           subtitle: filterType === 'CATEGORIAS' ? "Collection" : "Brand",
           desc: item.description || (filterType === 'CATEGORIAS' ? "Peças únicas com preços incríveis." : "As melhores marcas do mercado."),
-          image: (filterType === 'CATEGORIAS' ? item.image : item.logo) || 'https://via.placeholder.com/600x800?text=IMAGE',
+          image: imageUrl,
           sticker: stickers[index % stickers.length],
           stickerColor: colors[index % colors.length],
           type: filterType
@@ -63,18 +68,16 @@ export default function CollectionsPage() {
         </p>
 
         {/* FILTER TOGGLE */}
-        <div className="flex justify-center gap-4 mt-8">
+        <div className={styles.filterContainer}>
           <button
             onClick={() => setFilterType('CATEGORIAS')}
-            className={`px-6 py-2 font-bold border-2 border-black transition-all ${filterType === 'CATEGORIAS' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}
-            style={{ fontFamily: 'Oswald' }}
+            className={`${styles.filterBtn} ${filterType === 'CATEGORIAS' ? styles.filterBtnActive : ''}`}
           >
             CATEGORIAS
           </button>
           <button
             onClick={() => setFilterType('MARCAS')}
-            className={`px-6 py-2 font-bold border-2 border-black transition-all ${filterType === 'MARCAS' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}
-            style={{ fontFamily: 'Oswald' }}
+            className={`${styles.filterBtn} ${filterType === 'MARCAS' ? styles.filterBtnActive : ''}`}
           >
             MARCAS
           </button>

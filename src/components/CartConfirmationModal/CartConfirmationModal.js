@@ -35,7 +35,17 @@ export default function CartConfirmationModal({ isOpen, onClose, product }) {
                         </p>
 
                         <div className={styles.imageWrapper}>
-                            <img src={product.images?.[0] || product.imgFront} alt={product.name} />
+                            <img
+                                src={
+                                    (() => {
+                                        const rawImg = product.images?.[0]?.src || product.imgFront;
+                                        return rawImg
+                                            ? (rawImg.startsWith('http') ? rawImg : `https://geral-tiptagapi.r954jc.easypanel.host${rawImg}`)
+                                            : 'https://via.placeholder.com/400x400?text=PRODUCT';
+                                    })()
+                                }
+                                alt={product.name}
+                            />
                         </div>
 
                         <div className={styles.actions}>
