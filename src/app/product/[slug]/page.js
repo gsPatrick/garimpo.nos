@@ -148,7 +148,9 @@ export default function ProductPage({ params }) {
   if (!product) return <div className={styles.loading}>PRODUTO NÃO ENCONTRADO :(</div>;
 
   const displayPrice = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price);
-  const images = product.images || [];
+  const images = (product.images || []).map(img =>
+    typeof img === 'string' ? img : (img?.src || 'https://via.placeholder.com/800x800?text=NO+IMAGE')
+  );
 
   return (
     <main className={styles.main}>

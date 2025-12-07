@@ -31,8 +31,10 @@ export default function ShopPage() {
         price: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(p.price),
         category: p.category?.name || 'Streetwear',
         tag: p.is_new ? 'NEW' : (p.is_hot ? 'HOT' : null),
-        imgFront: p.images?.[0] || 'https://via.placeholder.com/800x800?text=NO+IMAGE',
-        imgBack: p.images?.[1] || p.images?.[0] || 'https://via.placeholder.com/800x800?text=NO+IMAGE'
+        imgFront: (typeof p.images?.[0] === 'string' ? p.images?.[0] : p.images?.[0]?.src) || 'https://via.placeholder.com/800x800?text=NO+IMAGE',
+        imgBack: (typeof p.images?.[1] === 'string' ? p.images?.[1] : p.images?.[1]?.src) ||
+          (typeof p.images?.[0] === 'string' ? p.images?.[0] : p.images?.[0]?.src) ||
+          'https://via.placeholder.com/800x800?text=NO+IMAGE'
       }));
 
       setProducts(mappedProducts);

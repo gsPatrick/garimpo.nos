@@ -20,6 +20,7 @@ export default function CategoryCarousel() {
 
         const mappedCategories = data.map(cat => {
           let img = cat.image || 'https://via.placeholder.com/800x800?text=NO+IMAGE';
+          if (typeof img === 'object' && img.src) img = img.src; // Handle object case if it ever happens
 
           // Fix específico para JACKETS que está sem imagem
           if (cat.name === 'JACKETS' || cat.name === 'Jackets') {

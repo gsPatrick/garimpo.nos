@@ -69,7 +69,12 @@ export default function VariationModal({ isOpen, onClose, product, onConfirm }) 
 
                     <div className={styles.modalHeader}>
                         <img
-                            src={product.images?.[0] || product.imgFront || product.image}
+                            src={
+                                (typeof product.images?.[0] === 'string' ? product.images?.[0] : product.images?.[0]?.src) ||
+                                (typeof product.imgFront === 'string' ? product.imgFront : product.imgFront?.src) ||
+                                (typeof product.image === 'string' ? product.image : product.image?.src) ||
+                                'https://via.placeholder.com/800x800?text=NO+IMAGE'
+                            }
                             alt={product.name}
                             className={styles.productImage}
                         />

@@ -67,10 +67,23 @@ export default function ProductCard({ product }) {
               <span className={styles.tagSticker}>{product.tag}</span>
             )}
 
-            <img src={product.imgFront || product.images?.[0]} alt={product.name} className={styles.imgFront} />
+            <img
+              src={
+                (typeof product.imgFront === 'string' ? product.imgFront : product.imgFront?.src) ||
+                (typeof product.images?.[0] === 'string' ? product.images?.[0] : product.images?.[0]?.src) ||
+                'https://via.placeholder.com/800x800?text=NO+IMAGE'
+              }
+              alt={product.name}
+              className={styles.imgFront}
+            />
 
             <motion.img
-              src={product.imgBack || product.images?.[1] || product.images?.[0]}
+              src={
+                (typeof product.imgBack === 'string' ? product.imgBack : product.imgBack?.src) ||
+                (typeof product.images?.[1] === 'string' ? product.images?.[1] : product.images?.[1]?.src) ||
+                (typeof product.images?.[0] === 'string' ? product.images?.[0] : product.images?.[0]?.src) ||
+                'https://via.placeholder.com/800x800?text=NO+IMAGE'
+              }
               alt={product.name}
               className={styles.imgBack}
               variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
