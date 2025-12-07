@@ -248,6 +248,23 @@ export default function ProductPage({ params }) {
               )}
             </div>
 
+            {/* MEASUREMENTS TABLE */}
+            {product.measurements && product.measurements.length > 0 && (
+              <div className={styles.measurementsTableWrapper}>
+                <h3 className={styles.measurementsTitle}>Medidas da Peça</h3>
+                <table className={styles.measurementsTable}>
+                  <tbody>
+                    {product.measurements.map((m, i) => (
+                      <tr key={i}>
+                        <td className={styles.measurementLabel}>{m.nome || m.name}</td>
+                        <td className={styles.measurementValue}>{m.valor || m.value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
             <div className={styles.selectors}>
               {/* COR */}
               {availableColors.length > 0 && (
