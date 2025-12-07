@@ -436,7 +436,10 @@ export default function CheckoutPage() {
               {cartItems.map((item) => (
                 <div key={item.id} className={styles.itemRow}>
                   <div className={styles.imgWrapper}>
-                    <img src={item.image || 'https://via.placeholder.com/100?text=No+Image'} alt={item.name} />
+                    <img
+                      src={typeof item.image === 'string' ? item.image : (item.image?.src || 'https://via.placeholder.com/100?text=No+Image')}
+                      alt={item.name}
+                    />
                     <span className={styles.qtyBadge}>{item.quantity}</span>
                   </div>
                   <div className={styles.itemInfo}>

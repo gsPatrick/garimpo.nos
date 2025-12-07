@@ -28,13 +28,19 @@ export function CartProvider({ children }) {
 
   const addToCart = async (product, quantity = 1, variation = null, openSidebar = true) => {
     const newItem = {
-      id: variation ? `${product.id}-${variation.id}` : product.id,
+      id: variation ? `${product.id}-${variation.id || (variation.size + variation.color)}` : product.id,
       productId: product.id,
       name: product.name,
-      price: variation ? variation.price : product.price, // Use variation price if available
-      image: product.images?.[0] || product.image || product.imgFront,
+      price: variation ? variation.price : product.price,
+      // Robust image extraction
+      image: (typeof product.imgFront === 'string' ? product.imgFront : product.imgFront?.src) ||
+        (typeof product.images?.[0] === 'string' ? product.images?.[0] : product.images?.[0]?.src) ||
+        'https://via.placeholder.com/800x800?text=NO+IMAGE',
       quantity,
-      variation
+      variation,
+      // Extract color and size for easy access
+      color: variation?.color || variation?.attributes?.Color || product.color || 'Única',
+      size: variation?.size || variation?.attributes?.Size || product.size || 'Único'
     };
 
     const existingItemIndex = cartItems.findIndex(item => item.id === newItem.id);
