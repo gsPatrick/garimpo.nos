@@ -44,17 +44,7 @@ export default function CartSidebar() {
               <button onClick={toggleCart} className={styles.closeBtn}>✕</button>
             </div>
 
-            {/* BARRA DE FRETE GRÁTIS (Estilo Doodle) */}
-            <div className={styles.shippingBarContainer}>
-              <p className={styles.shippingText}>★ FRETE GRÁTIS PARA TODO O BRASIL! ★</p>
-              <div className={styles.progressBarBorder}>
-                <motion.div
-                  className={styles.progressBarFill}
-                  initial={{ width: '100%' }}
-                  animate={{ width: '100%' }}
-                />
-              </div>
-            </div>
+            {/* BARRA DE FRETE REMOVIDA */}
 
             {/* LISTA DE ITENS */}
             <div className={styles.itemsList}>
@@ -69,7 +59,7 @@ export default function CartSidebar() {
                 cartItems.map((item) => (
                   <motion.div layout key={item.id} className={styles.itemCard}>
                     <div className={styles.imgWrapper}>
-                      <img src={item.image} alt={item.name} />
+                      <img src={typeof item.image === 'string' ? item.image : (item.image?.src || 'https://via.placeholder.com/150')} alt={item.name} />
                     </div>
 
                     <div className={styles.itemInfo}>

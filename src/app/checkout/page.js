@@ -465,7 +465,7 @@ export default function CheckoutPage() {
 
               <div className={styles.totalRow}>
                 <span>FRETE</span>
-                <span className={styles.free}>GRÁTIS</span>
+                <span className={styles.value}>A Calcular</span>
               </div>
 
               <div className={`${styles.totalRow} ${styles.grandTotal}`}>

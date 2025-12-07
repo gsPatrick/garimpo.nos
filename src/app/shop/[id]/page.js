@@ -20,7 +20,7 @@ export default function ProductPage({ params }) {
   // Se não achar o produto, joga para 404 (opcional)
   if (!product) {
     // Retorno simples de erro ou use notFound() do next
-    return <div style={{padding: 100, textAlign: 'center'}}>PRODUTO NÃO ENCONTRADO :(</div>;
+    return <div style={{ padding: 100, textAlign: 'center' }}>PRODUTO NÃO ENCONTRADO :(</div>;
   }
 
   // Estados locais
@@ -35,23 +35,23 @@ export default function ProductPage({ params }) {
 
   return (
     <main className={styles.main}>
-      
+
       {/* Fundo Quadriculado */}
       <div className={styles.bgGrid}></div>
 
       <div className={styles.container}>
-        
+
         {/* --- COLUNA ESQUERDA (GALERIA SCRAPBOOK) --- */}
         <div className={styles.gallery}>
           <div className={styles.mainImageWrapper}>
             <div className={styles.tapeTop}></div>
-            
+
             <AnimatePresence mode='wait'>
-              <motion.img 
-                key={activeImg} 
-                src={product.images[activeImg] || product.imgFront} 
-                className={styles.mainImage} 
-                initial={{ opacity: 0 }} 
+              <motion.img
+                key={activeImg}
+                src={product.images[activeImg] || product.imgFront}
+                className={styles.mainImage}
+                initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
@@ -61,12 +61,12 @@ export default function ProductPage({ params }) {
             {/* Sticker decorativo na foto */}
             <div className={styles.stickerPhoto}>LOOKINHO</div>
           </div>
-          
+
           <div className={styles.thumbGrid}>
             {product.images.map((img, idx) => (
-              <div 
-                key={idx} 
-                className={`${styles.thumb} ${activeImg === idx ? styles.activeThumb : ''}`} 
+              <div
+                key={idx}
+                className={`${styles.thumb} ${activeImg === idx ? styles.activeThumb : ''}`}
                 onClick={() => setActiveImg(idx)}
               >
                 <img src={img} alt="thumbnail" />
@@ -78,15 +78,15 @@ export default function ProductPage({ params }) {
         {/* --- COLUNA DIREITA (INFO CADERNO) --- */}
         <div className={styles.infoPanel}>
           <div className={styles.stickyWrapper}>
-            
+
             <div className={styles.header}>
               <div className={styles.tagWrapper}>
                 <span className={styles.tagNew}>NEW DROP</span>
                 <span className={styles.tagSeason}>{product.category}</span>
               </div>
-              
+
               <h1 className={styles.title}>{product.name}</h1>
-              
+
               <div className={styles.priceRow}>
                 <span className={styles.priceTag}>{product.price}</span>
                 <div className={styles.ratingSummary}>
@@ -100,48 +100,46 @@ export default function ProductPage({ params }) {
               <span className={styles.doodleArrow}>➔</span>
               {product.description}
             </p>
-            
-            <div className={styles.selectors}>
-               {/* COR */}
-               <div className={styles.selectorGroup}>
-                  <label>COR: <span className={styles.scriptLabel}>{selectedColor}</span></label>
-                  <div className={styles.colorOptions}>
-                    {product.colors.map(c => (
-                      <button 
-                        key={c.name} 
-                        onClick={()=>setSelectedColor(c.name)} 
-                        className={`${styles.colorBtn} ${selectedColor === c.name ? styles.activeColorBtn : ''}`}
-                        style={{backgroundColor: c.hex}} 
-                        title={c.name}
-                      />
-                    ))}
-                  </div>
-               </div>
 
-               {/* TAMANHO */}
-               <div className={styles.selectorGroup}>
-                  <label>TAMANHO: <span className={styles.scriptLabel}>{selectedSize}</span></label>
-                  <div className={styles.sizeOptions}>
-                    {product.sizes.map(s => (
-                      <button 
-                        key={s} 
-                        onClick={()=>setSelectedSize(s)} 
-                        className={`${styles.sizeBtn} ${selectedSize === s ? styles.activeSize : ''}`}
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-               </div>
+            <div className={styles.selectors}>
+              {/* COR */}
+              <div className={styles.selectorGroup}>
+                <label>COR: <span className={styles.scriptLabel}>{selectedColor}</span></label>
+                <div className={styles.colorOptions}>
+                  {product.colors.map(c => (
+                    <button
+                      key={c.name}
+                      onClick={() => setSelectedColor(c.name)}
+                      className={`${styles.colorBtn} ${selectedColor === c.name ? styles.activeColorBtn : ''}`}
+                      style={{ backgroundColor: c.hex }}
+                      title={c.name}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* TAMANHO */}
+              <div className={styles.selectorGroup}>
+                <label>TAMANHO: <span className={styles.scriptLabel}>{selectedSize}</span></label>
+                <div className={styles.sizeOptions}>
+                  {product.sizes.map(s => (
+                    <button
+                      key={s}
+                      onClick={() => setSelectedSize(s)}
+                      className={`${styles.sizeBtn} ${selectedSize === s ? styles.activeSize : ''}`}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <button className={styles.addToCartBtn}>
               BOTA NA SACOLA! 🛍️
             </button>
 
-            <div className={styles.shippingNote}>
-              <span className={styles.truckIcon}>🚚</span> FRETE GRÁTIS acima de R$ 500
-            </div>
+            {/* Shipping Note Removed */}
           </div>
         </div>
       </div>
@@ -152,8 +150,8 @@ export default function ProductPage({ params }) {
           <h2>
             QUEM JÁ COMPROU & <span className={styles.scriptHighlight}>Amou!</span>
           </h2>
-          <button 
-            className={styles.writeReviewBtn} 
+          <button
+            className={styles.writeReviewBtn}
             onClick={() => setReviewFormOpen(!reviewFormOpen)}
           >
             {reviewFormOpen ? 'FECHAR X' : 'DEIXAR MEU RECADO ✎'}
@@ -163,7 +161,7 @@ export default function ProductPage({ params }) {
         {/* FORM */}
         <AnimatePresence>
           {reviewFormOpen && (
-            <motion.form 
+            <motion.form
               className={styles.reviewForm}
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
@@ -209,7 +207,7 @@ export default function ProductPage({ params }) {
         <h2 className={styles.relatedTitle}>
           COMPLETE O <span className={styles.scriptPink}>Look</span>
         </h2>
-        
+
         <div className={styles.relatedGrid}>
           {relatedItems.map((item) => (
             <ProductCard key={item.id} product={item} />

@@ -6,7 +6,7 @@ import styles from './Hero.module.css';
 
 // Componente para letras recortadas (Mantido igual)
 const CutoutLetter = ({ letter, color, rotate, delay }) => (
-  <motion.span 
+  <motion.span
     className={`${styles.cutoutLetter} ${color === 'pink' ? styles.pinkBg : styles.blackBg}`}
     style={{ rotate: rotate }}
     initial={{ y: 100, opacity: 0 }}
@@ -21,17 +21,17 @@ const CutoutLetter = ({ letter, color, rotate, delay }) => (
 export default function Hero() {
   return (
     <section className={styles.heroSection}>
-      
+
       <div className={styles.bgGrid}></div>
       <div className={styles.blobPink}></div>
-      
+
       <div className={styles.container}>
-        
+
         {/* --- LADO ESQUERDO (TEXTOS) --- */}
         <div className={styles.textSide}>
-          
+
           {/* Badge Alterado */}
-          <motion.div 
+          <motion.div
             className={styles.topBadge}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -51,9 +51,9 @@ export default function Hero() {
               <CutoutLetter letter="P" color="black" rotate="2deg" delay={0.35} />
               <CutoutLetter letter="O" color="black" rotate="-4deg" delay={0.4} />
             </div>
-            
+
             <div className={styles.rowBottom}>
-              <motion.span 
+              <motion.span
                 className={styles.outlineText}
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -67,7 +67,7 @@ export default function Hero() {
           <div className={styles.scriptContainer}>
             <span className={styles.arrowDoodle}>⤷</span>
             <h2 className={styles.scriptSubtitle}>
-              Moda Circular <br/> com <span className={styles.highlight}>Propósito!</span>
+              Moda Circular <br /> com <span className={styles.highlight}>Propósito!</span>
             </h2>
           </div>
 
@@ -80,19 +80,16 @@ export default function Hero() {
             <Link href="/shop" className={styles.btnPrimary}>
               VER OUTLET
             </Link>
-            
-            <div className={styles.tagPrice}>
-              <span>FRETE</span>
-              <strong>OFF</strong>
-            </div>
+
+            {/* Tag Price Removed */}
           </div>
         </div>
 
         {/* --- LADO DIREITO (AS 3 POLAROIDS JUNTAS) --- */}
         <div className={styles.visualSide}>
-          
+
           {/* FOTO 1 (Fundo) */}
-          <motion.div 
+          <motion.div
             className={`${styles.polaroid} ${styles.p1}`}
             animate={{ y: [0, -8, 0], rotate: [-15, -12, -15] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -103,7 +100,7 @@ export default function Hero() {
           </motion.div>
 
           {/* FOTO 2 (Meio) */}
-          <motion.div 
+          <motion.div
             className={`${styles.polaroid} ${styles.p2}`}
             animate={{ y: [0, 10, 0], rotate: [10, 8, 10] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
@@ -114,7 +111,7 @@ export default function Hero() {
           </motion.div>
 
           {/* FOTO 3 (Frente - Destaque) */}
-          <motion.div 
+          <motion.div
             className={`${styles.polaroid} ${styles.p3}`}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1, rotate: -2 }}
@@ -127,15 +124,15 @@ export default function Hero() {
           {/* Elementos Soltos */}
           <div className={styles.star1}>✦</div>
           <div className={styles.star2}>★</div>
-          
+
           {/* Sticker NEW DROP (Rosa e Cinza) */}
-          <motion.div 
+          <motion.div
             className={styles.circleSticker}
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           >
             <svg viewBox="0 0 100 100">
-              <path id="curve" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent"/>
+              <path id="curve" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
               <text>
                 <textPath href="#curve" fill="#fff" fontWeight="bold">
                   • NEW DROP • NEW DROP • NEW DROP •
@@ -147,7 +144,7 @@ export default function Hero() {
         </div>
 
       </div>
-      
+
       <div className={styles.rippedPaper}></div>
     </section>
   );

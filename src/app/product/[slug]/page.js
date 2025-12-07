@@ -149,7 +149,7 @@ export default function ProductPage({ params }) {
 
   const displayPrice = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price);
   const images = (product.images || []).map(img =>
-    typeof img === 'string' ? img : (img?.src || 'https://via.placeholder.com/800x800?text=NO+IMAGE')
+    (typeof img === 'string' ? img : img?.src) || 'https://via.placeholder.com/800x800?text=NO+IMAGE'
   );
 
   return (
@@ -313,9 +313,7 @@ export default function ProductPage({ params }) {
               product={product}
             />
 
-            <div className={styles.shippingNote}>
-              <span className={styles.truckIcon}>🚚</span> FRETE GRÁTIS acima de R$ 500
-            </div>
+            {/* Shipping Note Removed */}
           </div>
         </div>
       </div>
