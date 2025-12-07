@@ -1,55 +1,56 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import styles from './page.module.css';
-
-const LOOKS = [
-  {
-    id: 1,
-    title: "SILVER",
-    subtitle: "Mood",
-    desc: "A tendência do prata veio pra ficar. Misture correntes pesadas com brincos delicados.",
-    mainImg: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?q=80&w=800&auto=format&fit=crop", // Ex: Beanie/Joias
-    products: [
-      { name: "Corrente Chunky", price: "R$ 89,90" },
-      { name: "Brinco Star", price: "R$ 49,90" }
-    ],
-    sticker: "TREND",
-    color: "pink"
-  },
-  {
-    id: 2,
-    title: "BAGS &",
-    subtitle: "Stuff",
-    desc: "Bolsas que cabem o mundo (e mais um pouco). O toque de cor que faltava no seu look all black.",
-    mainImg: "https://images.unsplash.com/photo-1559563458-527698bf5295?q=80&w=800&auto=format&fit=crop", // Ex: Bolsa
-    products: [
-      { name: "Bolsa Cargo V2", price: "R$ 159,90" },
-      { name: "Óculos Retro", price: "R$ 79,90" }
-    ],
-    sticker: "MUST HAVE",
-    color: "black"
-  },
-  {
-    id: 3,
-    title: "MIX DE",
-    subtitle: "Texturas",
-    desc: "Não tenha medo de ousar. Acessórios de metal com tecidos felpudos? A gente AMA.",
-    mainImg: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop",
-    products: [
-      { name: "Bucket Hat", price: "R$ 69,90" },
-      { name: "Cinto Industrial", price: "R$ 59,90" }
-    ],
-    sticker: "AMEIII",
-    color: "pink"
-  }
-];
+import api from '@/services/api';
 
 export default function LookbookPage() {
+  const [looks, setLooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLooks = async () => {
+      try {
+        const response = await api.get('/products', { params: { category: 'Acessórios' } });
+        const data = response.data.data || [];
+
+        const mappedLooks = data.map((prod, index) => {
+          const colors = ["pink", "black"];
+          // Split name for title effect if possible
+          const nameParts = prod.name.split(' ');
+          const title = nameParts[0] || "LOOK";
+          const subtitle = nameParts.slice(1).join(' ') || "Style";
+
+          return {
+            id: prod.id,
+            title: title.toUpperCase(),
+            subtitle: subtitle,
+            desc: prod.description || "Acessório essencial para compor seu visual.",
+            mainImg: prod.images?.[0] || 'https://via.placeholder.com/800x800?text=LOOK',
+            products: [
+              { name: prod.name, price: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(prod.price) }
+            ],
+            sticker: "FRESH",
+            color: colors[index % colors.length]
+          };
+        });
+
+        setLooks(mappedLooks);
+      } catch (error) {
+        console.error("Failed to fetch looks", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLooks();
+  }, []);
+
   return (
     <main className={styles.main}>
-      
+
       <div className={styles.bgGrid}></div>
 
       {/* HERO DO LOOKBOOK */}
@@ -66,63 +67,84 @@ export default function LookbookPage() {
 
       {/* LISTA DE LOOKS (Estilo Revista) */}
       <div className={styles.lookbookContainer}>
-        {LOOKS.map((look, index) => (
-          <section key={look.id} className={`${styles.lookSection} ${index % 2 !== 0 ? styles.inverted : ''}`}>
-            
-            {/* LADO DA FOTO (Polaroid Gigante) */}
-            <div className={styles.imageCol}>
-              <motion.div 
-                className={styles.polaroidFrame}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-              >
-                <div className={styles.tape}></div>
-                <img src={look.mainImg} alt={look.title} className={styles.lookImg} />
-                
-                {/* Sticker na foto */}
-                <div className={`${styles.sticker} ${styles[look.color]}`}>
-                  {look.sticker}
-                </div>
-              </motion.div>
+        {loading ? (
+          // SKELETON
+          Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} style={{
+              height: '600px',
+              background: '#f0f0f0',
+              border: '2px solid #000',
+              marginBottom: '80px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <span style={{ fontFamily: 'Oswald', fontSize: '1.5rem', opacity: 0.5, animation: 'pulse 1s infinite' }}>LOADING LOOKS...</span>
             </div>
+          ))
+        ) : looks.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '60px', border: '2px dashed #000' }}>
+            <h3 style={{ fontFamily: 'Oswald', fontSize: '2rem' }}>NENHUM LOOK ENCONTRADO</h3>
+          </div>
+        ) : (
+          looks.map((look, index) => (
+            <section key={look.id} className={`${styles.lookSection} ${index % 2 !== 0 ? styles.inverted : ''}`}>
 
-            {/* LADO DO CONTEÚDO */}
-            <div className={styles.infoCol}>
-              <motion.div
-                initial={{ opacity: 0, x: index % 2 !== 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
-                <h2 className={styles.lookTitle}>
-                  <span className={styles.blockTitle}>{look.title}</span>
-                  <span className={styles.scriptTitle}>{look.subtitle}</span>
-                </h2>
-                
-                <p className={styles.lookDesc}>{look.desc}</p>
+              {/* LADO DA FOTO (Polaroid Gigante) */}
+              <div className={styles.imageCol}>
+                <motion.div
+                  className={styles.polaroidFrame}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true }}
+                >
+                  <div className={styles.tape}></div>
+                  <img src={look.mainImg} alt={look.title} className={styles.lookImg} />
 
-                {/* Lista de Produtos no Look */}
-                <div className={styles.productList}>
-                  <h3 className={styles.listHeader}>NESTE LOOK:</h3>
-                  {look.products.map((prod, i) => (
-                    <div key={i} className={styles.productItem}>
-                      <span className={styles.prodName}>{prod.name}</span>
-                      <div className={styles.dots}></div>
-                      <span className={styles.prodPrice}>{prod.price}</span>
-                    </div>
-                  ))}
-                </div>
+                  {/* Sticker na foto */}
+                  <div className={`${styles.sticker} ${styles[look.color]}`}>
+                    {look.sticker}
+                  </div>
+                </motion.div>
+              </div>
 
-                <Link href="/shop" className={styles.shopBtn}>
-                  COMPRAR O LOOK ➜
-                </Link>
-              </motion.div>
-            </div>
+              {/* LADO DO CONTEÚDO */}
+              <div className={styles.infoCol}>
+                <motion.div
+                  initial={{ opacity: 0, x: index % 2 !== 0 ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <h2 className={styles.lookTitle}>
+                    <span className={styles.blockTitle}>{look.title}</span>
+                    <span className={styles.scriptTitle}>{look.subtitle}</span>
+                  </h2>
 
-          </section>
-        ))}
+                  <p className={styles.lookDesc}>{look.desc}</p>
+
+                  {/* Lista de Produtos no Look */}
+                  <div className={styles.productList}>
+                    <h3 className={styles.listHeader}>NESTE LOOK:</h3>
+                    {look.products.map((prod, i) => (
+                      <div key={i} className={styles.productItem}>
+                        <span className={styles.prodName}>{prod.name}</span>
+                        <div className={styles.dots}></div>
+                        <span className={styles.prodPrice}>{prod.price}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link href={`/product/${look.id}`} className={styles.shopBtn}>
+                    COMPRAR O LOOK ➜
+                  </Link>
+                </motion.div>
+              </div>
+
+            </section>
+          ))
+        )}
       </div>
 
       {/* FINAL CTA */}
@@ -130,6 +152,14 @@ export default function LookbookPage() {
         <h2>QUER VER MAIS?</h2>
         <Link href="/shop" className={styles.btnOutline}>IR PARA A LOJA</Link>
       </div>
+
+      {/* COMING SOON SECTION */}
+      <section className={styles.comingSoon} style={{ marginTop: '80px', textAlign: 'center', opacity: 0.7 }}>
+        <div style={{ border: '2px dashed #000', padding: '40px', display: 'inline-block' }}>
+          <h3 style={{ fontFamily: 'Oswald', fontSize: '2rem' }}>PRÓXIMO DROP EM BREVE</h3>
+          <p>Estamos fotografando o novo editorial. Aguarde.</p>
+        </div>
+      </section>
 
     </main>
   );

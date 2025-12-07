@@ -7,18 +7,18 @@ import Link from 'next/link';
 
 export default function CartSidebar() {
   const { isCartOpen, toggleCart, cartItems, removeItem, updateQuantity, subtotal } = useCart();
-  
-  // Lógica da Barra de Frete
-  const FREE_SHIPPING_THRESHOLD = 500;
-  const progress = Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
-  const remaining = FREE_SHIPPING_THRESHOLD - subtotal;
+
+  // Lógica da Barra de Frete (FRETE GRÁTIS PARA TODOS)
+  // const FREE_SHIPPING_THRESHOLD = 500;
+  // const progress = Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
+  // const remaining = FREE_SHIPPING_THRESHOLD - subtotal;
 
   return (
     <AnimatePresence>
       {isCartOpen && (
         <>
           {/* Overlay */}
-          <motion.div 
+          <motion.div
             className={styles.overlay}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -27,14 +27,14 @@ export default function CartSidebar() {
           />
 
           {/* O Carrinho (Folha de Papel) */}
-          <motion.div 
+          <motion.div
             className={styles.sidebar}
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
-            
+
             {/* HEADER */}
             <div className={styles.header}>
               <h2>
@@ -46,18 +46,12 @@ export default function CartSidebar() {
 
             {/* BARRA DE FRETE GRÁTIS (Estilo Doodle) */}
             <div className={styles.shippingBarContainer}>
-              {remaining > 0 ? (
-                <p className={styles.shippingText}>
-                  FALTAM <span className={styles.highlight}>R$ {remaining.toFixed(2)}</span> PARA FRETE FREE!
-                </p>
-              ) : (
-                <p className={styles.shippingText}>★ AEE! FRETE GRÁTIS LIBERADO! ★</p>
-              )}
+              <p className={styles.shippingText}>★ FRETE GRÁTIS PARA TODO O BRASIL! ★</p>
               <div className={styles.progressBarBorder}>
-                <motion.div 
-                  className={styles.progressBarFill} 
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
+                <motion.div
+                  className={styles.progressBarFill}
+                  initial={{ width: '100%' }}
+                  animate={{ width: '100%' }}
                 />
               </div>
             </div>
@@ -77,7 +71,7 @@ export default function CartSidebar() {
                     <div className={styles.imgWrapper}>
                       <img src={item.image} alt={item.name} />
                     </div>
-                    
+
                     <div className={styles.itemInfo}>
                       <div className={styles.infoTop}>
                         <h4>{item.name}</h4>
@@ -85,9 +79,9 @@ export default function CartSidebar() {
                           🗑
                         </button>
                       </div>
-                      
+
                       <p className={styles.variant}>{item.color} / {item.size}</p>
-                      
+
                       <div className={styles.infoBottom}>
                         <div className={styles.qtyControl}>
                           <button onClick={() => updateQuantity(item.id, -1)}>-</button>
@@ -109,7 +103,7 @@ export default function CartSidebar() {
                   <span>SUBTOTAL:</span>
                   <span className={styles.totalPrice}>R$ {subtotal.toFixed(2)}</span>
                 </div>
-                
+
                 <Link href="/checkout" className={styles.checkoutBtn} onClick={toggleCart}>
                   FINALIZAR COMPRA ➜
                 </Link>

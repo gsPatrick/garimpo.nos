@@ -1,49 +1,11 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ProductCard from '../ProductCard/ProductCard';
 import styles from './FeaturedDrops.module.css';
 import Link from 'next/link';
-
-// Dados Mockados (Simulando API)
-const DROPS = [
-  {
-    id: 1,
-    name: "Cyber Hoodie X1",
-    price: "349,90",
-    category: "Heavyweight Cotton",
-    tag: "NEW",
-    imgFront: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=800&auto=format&fit=crop",
-    imgBack: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 2,
-    name: "Acid Wash Tee",
-    price: "129,90",
-    category: "Oversized Fit",
-    tag: "HOT",
-    imgFront: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800&auto=format&fit=crop",
-    imgBack: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 3,
-    name: "Tactical Vest 2.0",
-    price: "499,90",
-    category: "Techwear",
-    tag: null,
-    imgFront: "https://images.unsplash.com/photo-1559563458-527698bf5295?q=80&w=800&auto=format&fit=crop",
-    imgBack: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 4,
-    name: "Neon Beanie",
-    price: "89,90",
-    category: "Accessories",
-    tag: "LAST UNITS",
-    imgFront: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?q=80&w=800&auto=format&fit=crop",
-    imgBack: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800&auto=format&fit=crop"
-  }
-];
+import api from '@/services/api';
 
 // Variantes para animação em cascata (stagger)
 const containerVariants = {
@@ -58,14 +20,92 @@ const containerVariants = {
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: { duration: 0.6, ease: "easeOut" }
   }
 };
 
 export default function FeaturedDrops() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        // Busca produtos destacados (is_featured=true)
+        const response = await api.get('/products', {
+          params: { is_featured: true, limit: 4 }
+        });
+
+        // Mapeia para o formato do componente
+        const mappedProducts = response.data.data.map(p => ({
+          id: p.id,
+          name: p.name,
+          price: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(p.price),
+          category: p.category?.name || 'Streetwear',
+          tag: p.is_new ? 'NEW' : (p.is_hot ? 'HOT' : null),
+          imgFront: p.images?.[0] || 'https://via.placeholder.com/800x800?text=NO+IMAGE',
+          imgBack: p.images?.[1] || p.images?.[0] || 'https://via.placeholder.com/800x800?text=NO+IMAGE'
+        }));
+
+        setProducts(mappedProducts);
+      } catch (error) {
+        console.error("Failed to fetch featured drops", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeatured();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className={styles.section}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>A MODA DO <span className={styles.outline}>MOMENTO</span></h2>
+        </div>
+        <div className={styles.grid}>
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} style={{
+              height: '400px',
+              background: '#f0f0f0',
+              border: '2px solid #000',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <span style={{ fontFamily: 'Oswald', fontSize: '1.5rem', opacity: 0.5, animation: 'pulse 1s infinite' }}>LOADING...</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <section className={styles.section}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>A MODA DO <span className={styles.outline}>MOMENTO</span></h2>
+        </div>
+        <div style={{
+          border: '2px dashed #000',
+          padding: '40px',
+          textAlign: 'center',
+          background: '#fff',
+          margin: '20px 0'
+        }}>
+          <h3 style={{ fontFamily: 'Oswald', fontSize: '2rem' }}>SEM DROPS NO MOMENTO</h3>
+          <p>Estamos preparando novidades quentes. Fique ligado!</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className={styles.section}>
       <div className={styles.header}>
@@ -75,14 +115,14 @@ export default function FeaturedDrops() {
         </Link>
       </div>
 
-      <motion.div 
+      <motion.div
         className={styles.grid}
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }} // Anima quando 100px do elemento entra na tela
+        viewport={{ once: true, margin: "-100px" }}
       >
-        {DROPS.map((product) => (
+        {products.map((product) => (
           <motion.div key={product.id} variants={cardVariants}>
             <ProductCard product={product} />
           </motion.div>

@@ -1,34 +1,76 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import api from '../services/api';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  // 1. COMEÇA DESLOGADO (null)
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // CORREÇÃO: Agora a função aceita tanto um objeto {name, email} quanto apenas o email string
-  const login = (userData) => {
-    if (typeof userData === 'string') {
-      // Se veio só o email (string), preenche um nome padrão
-      setUser({ name: "Street Member", email: userData });
-    } else {
-      // Se veio o objeto completo { name, email }, usa ele
-      setUser(userData);
+  useEffect(() => {
+    const loadUser = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await api.get('/users/profile');
+          setUser(response.data);
+        } catch (error) {
+          console.error("Failed to load user", error);
+          localStorage.removeItem('token');
+        }
+      }
+      setLoading(false);
+    };
+    loadUser();
+  }, []);
+
+  const login = async (email, password) => {
+    try {
+      const response = await api.post('/users/login', { email, password });
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser(user);
+      return { success: true };
+    } catch (error) {
+      console.error("Login error", error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Erro ao fazer login'
+      };
+    }
+  };
+
+  const register = async (data) => {
+    try {
+      await api.post('/users/register', data);
+      return { success: true };
+    } catch (error) {
+      console.error("Register error", error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Erro ao criar conta'
+      };
     }
   };
 
   const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
+    // Opcional: window.location.href = '/';
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      login, 
-      logout, 
-      isAuthenticated: !!user 
+    <AuthContext.Provider value={{
+      user,
+      login,
+      register,
+      logout,
+      isAuthenticated: !!user,
+      loading
     }}>
       {children}
     </AuthContext.Provider>

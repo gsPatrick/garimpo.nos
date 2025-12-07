@@ -3,12 +3,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { PRODUCTS_DB } from '@/data/products'; // Consumindo o Mock Real
 import styles from './SearchOverlay.module.css';
+import api from '@/services/api';
 
 export default function SearchOverlay({ isOpen, onClose }) {
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
+  const debounceTimeout = useRef(null);
 
   // Foca no input sempre que abre
   useEffect(() => {
@@ -19,19 +22,70 @@ export default function SearchOverlay({ isOpen, onClose }) {
 
   // Limpa a busca ao fechar
   useEffect(() => {
-    if (!isOpen) setQuery('');
+    if (!isOpen) {
+      setQuery('');
+      setResults([]);
+    }
   }, [isOpen]);
 
-  // Filtro no Mock DB
-  const filteredItems = PRODUCTS_DB.filter(item => 
-    item.name.toLowerCase().includes(query.toLowerCase()) || 
-    item.category.toLowerCase().includes(query.toLowerCase())
-  );
+  // Busca Debounced
+  useEffect(() => {
+    if (!query) {
+      setResults([]);
+      return;
+    }
+
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    setLoading(true);
+    debounceTimeout.current = setTimeout(async () => {
+      try {
+        const response = await api.get('/products', {
+          params: { search: query, limit: 5 }
+        });
+
+        const mappedResults = response.data.data.map(p => ({
+          id: p.id,
+          name: p.name,
+          price: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(p.price),
+          category: p.category?.name || 'Streetwear',
+          imgFront: p.images?.[0] || 'https://via.placeholder.com/800x800?text=No+Image'
+        }));
+
+        setResults(mappedResults);
+      } catch (error) {
+        console.error("Search failed", error);
+      } finally {
+        setLoading(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(debounceTimeout.current);
+  }, [query]);
+
+  const [categories, setCategories] = useState([]);
+
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/categories');
+        if (response.data && Array.isArray(response.data)) {
+          setCategories(response.data.slice(0, 5));
+        }
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div 
+        <motion.div
           className={styles.overlay}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -42,7 +96,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
           <div className={styles.bgTexture}></div>
 
           <div className={styles.container}>
-            
+
             {/* Botão Fechar (Estilo Sticker) */}
             <button onClick={onClose} className={styles.closeBtn}>
               FECHAR ✕
@@ -52,16 +106,16 @@ export default function SearchOverlay({ isOpen, onClose }) {
             <div className={styles.searchHeader}>
               <span className={styles.searchLabel}>O QUE VOCÊ PROCURA?</span>
               <div className={styles.inputWrapper}>
-                <input 
+                <input
                   ref={inputRef}
-                  type="text" 
-                  placeholder="DIGITE AQUI..." 
+                  type="text"
+                  placeholder="DIGITE AQUI..."
                   className={styles.input}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />
-                <motion.div 
-                  className={styles.underline} 
+                <motion.div
+                  className={styles.underline}
                   layoutId="underline"
                 />
               </div>
@@ -69,10 +123,13 @@ export default function SearchOverlay({ isOpen, onClose }) {
 
             {/* Área de Resultados */}
             <div className={styles.resultsArea}>
-              
+
+              {/* CASO: CARREGANDO */}
+              {loading && <p className={styles.loadingText}>BUSCANDO...</p>}
+
               {/* CASO: SEM RESULTADOS */}
-              {query && filteredItems.length === 0 && (
-                <motion.div 
+              {!loading && query && results.length === 0 && (
+                <motion.div
                   className={styles.emptyState}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -84,11 +141,11 @@ export default function SearchOverlay({ isOpen, onClose }) {
               )}
 
               {/* CASO: LISTA DE RESULTADOS */}
-              {query && filteredItems.length > 0 && (
+              {!loading && query && results.length > 0 && (
                 <div className={styles.resultsList}>
-                  {filteredItems.map((item, index) => (
-                    <Link href={`/shop/${item.id}`} key={item.id} onClick={onClose} className={styles.linkWrapper}>
-                      <motion.div 
+                  {results.map((item, index) => (
+                    <Link href={`/product/${item.id}`} key={item.id} onClick={onClose} className={styles.linkWrapper}>
+                      <motion.div
                         className={styles.resultItem}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -98,7 +155,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
                         <div className={styles.thumbWrapper}>
                           <img src={item.imgFront} alt={item.name} />
                         </div>
-                        
+
                         <div className={styles.itemInfo}>
                           <span className={styles.catTag}>{item.category}</span>
                           <h3 className={styles.itemName}>{item.name}</h3>
@@ -117,14 +174,15 @@ export default function SearchOverlay({ isOpen, onClose }) {
                 <div className={styles.suggestions}>
                   <p className={styles.suggestionsTitle}>VIBES DO MOMENTO:</p>
                   <div className={styles.tagsCloud}>
-                    {['CROPPED', 'OVERSIZED', 'CARGO', 'NEON', 'ACESSÓRIOS'].map(tag => (
-                      <button key={tag} onClick={() => setQuery(tag)} className={styles.tagBtn}>
-                        #{tag}
+                    {categories.map(cat => (
+                      <button key={cat.id} onClick={() => setQuery(cat.name)} className={styles.tagBtn}>
+                        #{cat.name.toUpperCase()}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
+
 
             </div>
           </div>

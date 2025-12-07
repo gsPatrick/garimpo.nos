@@ -2,25 +2,39 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTheme } from '@/context/ThemeContext';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import SearchOverlay from '@/components/SearchOverlay/SearchOverlay';
+import AuthModal from '@/components/AuthModal/AuthModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Header.module.css';
 
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
   const { toggleCart, cartItems } = useCart();
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleProfileClick = (e) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      setShowAuthModal(true);
+    }
+  };
 
   return (
     <>
       <header className={styles.header}>
-        
+
         {/* HAMBURGUER (MOBILE) - ESQUERDA */}
-        <button 
-          className={styles.hamburger} 
+        <button
+          className={styles.hamburger}
           onClick={() => setMobileMenuOpen(true)}
         >
           <span className={styles.bar}></span>
@@ -34,37 +48,37 @@ export default function Header() {
             <img src="/logo.png" alt="Garimpo.Nós" className={styles.logoImg} />
           </Link>
         </div>
-        
+
         {/* NAV DESKTOP */}
         <nav className={styles.nav}>
           <Link href="/" className={styles.link}>Início</Link>
           <Link href="/shop" className={styles.link}>Loja</Link>
-          <Link href="/collections" className={styles.link}>Outlet</Link> 
+          <Link href="/collections" className={styles.link}>Outlet</Link>
           <Link href="/lookbook" className={styles.link}>Acessórios</Link>
           <Link href="/founder" className={styles.link}>Fundadora</Link>
           <Link href="/about" className={styles.link}>Sobre-nos</Link>
         </nav>
-        
+
         {/* AÇÕES (DIREITA) */}
         <div className={styles.actions}>
-          
+
           <button onClick={() => setIsSearchOpen(true)} className={styles.iconBtn} title="Buscar">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           </button>
 
-          <Link href="/account" className={styles.iconBtn} title="Minha Conta">
+          <Link href="/account" className={styles.iconBtn} title="Minha Conta" onClick={handleProfileClick}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           </Link>
 
           {/* Botão de Tema (Ainda troca o site, mas o ícone fica branco pois o header é dark) */}
           <button onClick={toggleTheme} className={styles.iconBtn} title="Mudar Tema">
             {theme === 'dark' ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg>
             ) : (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             )}
           </button>
-          
+
           {/* CARRINHO */}
           <button onClick={toggleCart} className={styles.cartBtn} title="Abrir Carrinho">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.cartIcon}>
@@ -80,7 +94,7 @@ export default function Header() {
       {/* MENU MOBILE (TAMBÉM ESCURO) */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div 
+          <motion.div
             className={styles.mobileMenu}
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
@@ -98,7 +112,7 @@ export default function Header() {
               <button onClick={() => { setIsSearchOpen(true); setMobileMenuOpen(false); }} className={styles.mobileIconBtn}>
                 BUSCAR 🔍
               </button>
-              <Link href="/account" className={styles.mobileIconBtn} onClick={() => setMobileMenuOpen(false)}>
+              <Link href="/account" className={styles.mobileIconBtn} onClick={(e) => { setMobileMenuOpen(false); handleProfileClick(e); }}>
                 CONTA 👤
               </Link>
               <button onClick={toggleTheme} className={styles.mobileIconBtn}>
@@ -120,7 +134,7 @@ export default function Header() {
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <Link 
+                  <Link
                     href={item.path}
                     className={styles.mobileLink}
                     onClick={() => setMobileMenuOpen(false)}
@@ -139,6 +153,12 @@ export default function Header() {
       </AnimatePresence>
 
       <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
+      <AnimatePresence>
+        {showAuthModal && (
+          <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+        )}
+      </AnimatePresence>
     </>
   );
 }
