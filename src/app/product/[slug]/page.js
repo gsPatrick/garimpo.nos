@@ -225,6 +225,29 @@ export default function ProductPage({ params }) {
               {product.description}
             </p>
 
+            <div className={styles.productDetails}>
+              {product.brand && (
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>MARCA:</span>
+                  <span className={styles.detailValue}>{product.brand}</span>
+                </div>
+              )}
+              {product.category && (
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>CATEGORIA:</span>
+                  <span className={styles.detailValue}>{product.category}</span>
+                </div>
+              )}
+              {product.dimensions && (
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>DIMENSÕES:</span>
+                  <span className={styles.detailValue}>
+                    {product.dimensions.height}x{product.dimensions.width}x{product.dimensions.length}cm
+                  </span>
+                </div>
+              )}
+            </div>
+
             <div className={styles.selectors}>
               {/* COR */}
               {availableColors.length > 0 && (
